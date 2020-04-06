@@ -20,16 +20,16 @@ add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 # INSTALL_INTERFACE: include path if being used as an installation (relative to install prefix)
 target_include_directories(${PROJECT_NAME} INTERFACE 
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}>
-    $<INSTALL_INTERFACE:${PROJECT_NAME}/${CMAKE_INSTALL_INCLUDEDIR}>)
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
 
 # Specifying rules for installing targets from a project
 install(TARGETS ${PROJECT_NAME}
     EXPORT ${PROJECT_NAME}_exported_targets
-    ARCHIVE DESTINATION ${PROJECT_NAME}/${CMAKE_INSTALL_LIBDIR}
-    LIBRARY DESTINATION ${PROJECT_NAME}/${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${PROJECT_NAME}/${CMAKE_INSTALL_BINDIR})
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # Note that using "-config" and "-config-version" suffixes are mandatory 
 # for Cmake to find them automatically (target file is included manually by
@@ -44,23 +44,23 @@ write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
 configure_package_config_file(
     ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}-config.cmake.in
     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
-    INSTALL_DESTINATION ${PROJECT_NAME}/${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
+    INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
 
 # Create/Install the export file
 install(EXPORT ${PROJECT_NAME}_exported_targets
     FILE        ${PROJECT_NAME}-targets.cmake
     NAMESPACE   ${PROJECT_NAME}::
-    DESTINATION ${PROJECT_NAME}/${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
 
 # Basically copying cmake files to the desired location
 install(FILES
     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
     ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
-    DESTINATION ${PROJECT_NAME}/${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
 
 # Basically copying headers to the desired location
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/
-    DESTINATION ${PROJECT_NAME}/${CMAKE_INSTALL_INCLUDEDIR}
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FILES_MATCHING PATTERN "*.h"
     PATTERN ".git" EXCLUDE
     PATTERN ".github" EXCLUDE
