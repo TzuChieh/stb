@@ -31,31 +31,36 @@ install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
-# Note that using "-config" and "-config-version" suffixes are mandatory 
-# for Cmake to find them automatically (target file is included manually by
-# the config file and is not required to have the "-targets" suffix, however
-# it's good practice to follow the same convention)
+# find_package() command will search for a file called "<name>Config.cmake" 
+# or "<lower-case-name>-config.cmake" for each name specified. We use the 
+# former convention as it includes case information.
+
+# Note that using "Config"/"-config" and "ConfigVersion"/"-config-version" 
+# suffixes are mandatory for Cmake to find them automatically (target file 
+# is included manually by the config file and is not required to have the 
+# "Targets"/"-targets" suffix, however it's good practice to follow the 
+# same convention)
 
 include(CMakePackageConfigHelpers)
-write_basic_package_version_file(${PROJECT_NAME}-config-version.cmake
+write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake
     VERSION       ${PROJECT_VERSION}
     COMPATIBILITY ExactVersion)
 
 configure_package_config_file(
-    ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}-config.cmake.in
-    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
+    ${PROJECT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake.in
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
     INSTALL_DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
 
 # Create/Install the export file
 install(EXPORT ${PROJECT_NAME}_exported_targets
-    FILE        ${PROJECT_NAME}-targets.cmake
+    FILE        ${PROJECT_NAME}Targets.cmake
     NAMESPACE   ${PROJECT_NAME}::
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
 
 # Basically copying cmake files to the desired location
 install(FILES
-    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config.cmake
-    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    ${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
     DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/cmake/)
 
 # Basically copying headers to the desired location
